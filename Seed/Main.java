@@ -43,8 +43,8 @@ public class Main {
 			String number = "0600";
 			while(!number.equals("2115")){
 				String q = s + "NB"+ number +"," + "DATE '" + da + "'"+ ");";
-				System.out.println(da);
-				System.out.println("Adding " + q);
+				//System.out.println(da);
+				//System.out.println("Adding " + q);
 				query.add(q);
 				int j = Integer.parseInt(number) + 15;
 				number ="0" + String.valueOf(j);
