@@ -59,3 +59,72 @@ insert into Train (train_Number,type,direction,capacity,start_time,status) value
 insert into Train (train_Number,type,direction,capacity,start_time,status) values ("SB2030", "Regular", "SB", 5, 2030, "Scheduled");
 insert into Train (train_Number,type,direction,capacity,start_time,status) values ("SB2045", "Regular", "SB", 5, 2045, "Scheduled");
 insert into Train (train_Number,type,direction,capacity,start_time,status) values ("SB2100", "Express", "SB", 5, 2100, "Scheduled");
+
+
+
+
+
+//// SEED FOR NB
+
+
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0600", "Express", "NB", 5, 0600, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0615", "Regular", "NB", 5, 0615, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0630", "Regular", "NB", 5, 0630, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0645", "Regular", "NB", 5, 0645, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0700", "Express", "NB", 5, 0700, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0715", "Regular", "NB", 5, 0715, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0730", "Regular", "NB", 5, 0730, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0745", "Regular", "NB", 5, 0745, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0800", "Express", "NB", 5, 0800, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0815", "Regular", "NB", 5, 0815, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0830", "Regular", "NB", 5, 0830, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0845", "Regular", "NB", 5, 0845, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0900", "Express", "NB", 5, 0900, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0915", "Regular", "NB", 5, 0915, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0930", "Regular", "NB", 5, 0930, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB0945", "Regular", "NB", 5, 0945, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1000", "Express", "NB", 5, 1000, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1015", "Regular", "NB", 5, 1015, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1030", "Regular", "NB", 5, 1030, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1045", "Regular", "NB", 5, 1045, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1100", "Express", "NB", 5, 1100, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1115", "Regular", "NB", 5, 1115, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1130", "Regular", "NB", 5, 1130, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1145", "Regular", "NB", 5, 1145, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1200", "Express", "NB", 5, 1200, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1215", "Regular", "NB", 5, 1215, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1230", "Regular", "NB", 5, 1230, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1245", "Regular", "NB", 5, 1245, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1300", "Express", "NB", 5, 1300, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1315", "Regular", "NB", 5, 1315, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1330", "Regular", "NB", 5, 1330, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1345", "Regular", "NB", 5, 1345, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1400", "Express", "NB", 5, 1400, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1415", "Regular", "NB", 5, 1415, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1430", "Regular", "NB", 5, 1430, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1445", "Regular", "NB", 5, 1445, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1500", "Express", "NB", 5, 1500, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1515", "Regular", "NB", 5, 1515, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1530", "Regular", "NB", 5, 1530, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1545", "Regular", "NB", 5, 1545, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1600", "Express", "NB", 5, 1600, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1615", "Regular", "NB", 5, 1615, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1630", "Regular", "NB", 5, 1630, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1645", "Regular", "NB", 5, 1645, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1700", "Express", "NB", 5, 1700, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1715", "Regular", "NB", 5, 1715, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1730", "Regular", "NB", 5, 1730, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1745", "Regular", "NB", 5, 1745, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1800", "Express", "NB", 5, 1800, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1815", "Regular", "NB", 5, 1815, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1830", "Regular", "NB", 5, 1830, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1845", "Regular", "NB", 5, 1845, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1900", "Express", "NB", 5, 1900, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1915", "Regular", "NB", 5, 1915, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1930", "Regular", "NB", 5, 1930, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB1945", "Regular", "NB", 5, 1945, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB2000", "Express", "NB", 5, 2000, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB2015", "Regular", "NB", 5, 2015, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB2030", "Regular", "NB", 5, 2030, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB2045", "Regular", "NB", 5, 2045, "Scheduled");
+insert into Train (train_Number,type,direction,capacity,start_time,status) values ("NB2100", "Express", "NB", 5, 2100, "Scheduled");
