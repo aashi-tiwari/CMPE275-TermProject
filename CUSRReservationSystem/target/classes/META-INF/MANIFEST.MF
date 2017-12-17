@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: cmpe275lab2
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: pranjali
+Implementation-Vendor-Id: cmpe275lab2
+Build-Jdk: 1.8.0_144
+Implementation-URL: http://projects.spring.io/spring-boot/cmpe275lab2/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
