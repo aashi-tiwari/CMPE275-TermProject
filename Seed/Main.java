@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 public class Main {
 	public static void main(String args[]) throws ParseException{
+		
+		//System.out.println("HIIIIIIII");
 //		String s = "insert into train_capacity (train_number, travel_date) values (";
 //		String number = "0600";
 //		List<String> query = new ArrayList<String>();
@@ -30,14 +32,19 @@ public class Main {
 //			System.out.println(p);
 //		}
 		LocalDate localDate = LocalDate.now();
+		//LocalDate localDate = LocalDate.now().plusDays(15);
 		String da = String.valueOf(localDate);
+		
 		List<String> query = new ArrayList<String>();
-		for(int i = 0; i< 30; i++){
+		for(int i = 0; i< 15; i++){
 			da = getNextDate(da);
+			//System.out.println(da);
 			String s = "insert into train_capacity (train_number, travel_date) values (";
 			String number = "0600";
 			while(!number.equals("2115")){
 				String q = s + "NB"+ number +"," + "DATE '" + da + "'"+ ");";
+				System.out.println(da);
+				System.out.println("Adding " + q);
 				query.add(q);
 				int j = Integer.parseInt(number) + 15;
 				number ="0" + String.valueOf(j);
