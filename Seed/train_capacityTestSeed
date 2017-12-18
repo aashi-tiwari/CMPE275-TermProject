@@ -1,11 +1,11 @@
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0600",DATE '2017-12-18', 3, 3, 3, 3);
-insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0615",DATE '2017-12-18', 3, 3, 3, 3);
-insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0630",DATE '2017-12-18', 3, 3, 3, 3);
+insert into train_capacity (train_number, travel_date) values ("NB0615",DATE '2017-12-18');
+insert into train_capacity (train_number, travel_date) values ("NB0630",DATE '2017-12-18');
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0645",DATE '2017-12-18', 3, 3, 3, 3);
-insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0700",DATE '2017-12-18', 3, 3, 3, 3);
+insert into train_capacity (train_number, travel_date) values ("NB0700",DATE '2017-12-18');
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0715",DATE '2017-12-18', 3, 3, 3, 3);
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0730",DATE '2017-12-18', 3, 3, 3, 3);
-insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0745",DATE '2017-12-18', 3, 3, 3, 3);
+insert into train_capacity (train_number, travel_date) values ("NB0745",DATE '2017-12-18');
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0800",DATE '2017-12-18', 3, 3, 3, 3);
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0815",DATE '2017-12-18', 3, 3, 3, 3);
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("NB0830",DATE '2017-12-18', 3, 3, 3, 3);
