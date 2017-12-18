@@ -229,7 +229,7 @@ public class TrainController {
 		System.out.println("Finding capacity for " + tc.getTrainNumber());
 		int i = from;
 		for(; i<=to; i++){
-			char currentStation = (char)('A' + from);
+			char currentStation = (char)('A' + i);
 			String str = currentStation + "_capacity";
 			try {
 				Field field = tc.getClass().getDeclaredField(str);
