@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.sjsu.cmpe275.model.Response;
 import edu.sjsu.cmpe275.model.SearchResponse;
+import edu.sjsu.cmpe275.model.SearchResult;
 import edu.sjsu.cmpe275.model.Train;
 import edu.sjsu.cmpe275.model.TrainCapacity;
 import edu.sjsu.cmpe275.repository.TrainCapacityRepository;
@@ -112,7 +113,7 @@ public class TrainController {
 			
 			System.out.println("************in getTrain lst.size= "+lst.size());
     		//START: AASHI/PRANJALI
-			  List<SearchResponse> result = getTrains(lst, s);
+			SearchResult result = getTrains(lst, s);
 	          return new ResponseEntity<>(result, HttpStatus.OK);
 	       //END: AASHI/PRNAJALI
     	}
@@ -123,43 +124,84 @@ public class TrainController {
 }
     //START: AASHI/PRANJALI
 	//helper method to select top 5 trains
-	private List<SearchResponse> getTrains(List<TrainCapacity> lst, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JSONException {
+	private SearchResult getTrains(List<TrainCapacity> lst, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JSONException {
 		// TODO Auto-generated method stub
-		List<SearchResponse> result = new ArrayList<SearchResponse>();
-		
+		SearchResult result = new SearchResult();
 		if(s.connections.equals("None")){getNoneConnectionTrains(result, lst, s);}
 		else if(s.connections.equals("One")){getOneConnectionTrains(result, lst, s, 0);}
 		else getAnyConnectionTrains(result, lst, s);
 		return result;
 	}
 
-	private void getAnyConnectionTrains(List<SearchResponse> result, List<TrainCapacity> lst, SearchWrapper s) {
+	private void getAnyConnectionTrains(SearchResult result, List<TrainCapacity> lst, SearchWrapper s) {
 		// TODO Auto-generated method stub
 	}
 
-	private void getOneConnectionTrains(List<SearchResponse> result, List<TrainCapacity> lst, SearchWrapper s, int currentConnections) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-//		System.out.println("SELECTING DIRECT TRAINS from station " + s.departingStation1 + " To station " + s.arrivalStation1);
-//		//List<TrainCapacity> result = new ArrayList<TrainCapacity>();
-//		int count = 0;
-//		int f = s.departingStation1 - 'A';
-//		int t = s.arrivalStation1 - 'A';
-//		TrainCapacity one;
-//		TrainCapacity two;
-//		TrainCapacity tc;
-//		for(int i = 0; i< lst.size(); i++){
-//			tc = lst.get(i);
-//			char lastAccomodatedStation = canAccomodate(f, t, tc, s);
-//			if(lastAccomodatedStation == (char)('A' + (t-1))){
-//				result.add(tc);
-//				count++;
-//			}
-//			else if(currentConnections <1){
-//				currentConnections++;
-//				one = tc;
-//				System.out.println("Connecting train could be " + tc.getTrainNumber());
-//			}
-//			if(count>=5){break;}
-//		}
+	private void getOneConnectionTrains(SearchResult result, List<TrainCapacity> lst, SearchWrapper s, int currentConnections) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		System.out.println("SELECTING DIRECT TRAINS from station " + s.departingStation1 + " To station " + s.arrivalStation1);
+		//List<TrainCapacity> result = new ArrayList<TrainCapacity>();
+		int count = 0;
+		int f = s.departingStation1 - 'A';
+		int t = s.arrivalStation1 - 'A';
+		TrainCapacity tc1;
+		TrainCapacity tc2;
+		List<Character> expressStations = new ArrayList<Character>();
+		expressStations.add('A');
+		expressStations.add('F');
+		expressStations.add('K');
+		expressStations.add('P');
+		expressStations.add('U');
+		expressStations.add('Z');
+		for(int i = 0; i< lst.size(); i++){
+			tc1 = lst.get(i);
+			char lastAccomodatedStation = canAccomodate(f, t, tc1, s);
+			if(lastAccomodatedStation == s.departingStation1){continue;}
+			if(lastAccomodatedStation == (char)('A' + (t-1))){
+				//checking if that the train is express then it must be stopping at both the travelling stations
+				if(tc1.getTrainNumber().endsWith("00")){
+					if(!expressStations.contains(s.departingStation1) || !expressStations.contains(lastAccomodatedStation)){continue;}
+				}
+				SearchResponse response = new SearchResponse();
+				response.setTrainNumber(tc1.getTrainNumber());
+				response.setDepartingStation(s.departingStation1);
+				response.setArrivalStation(s.arrivalStation1);
+				response.setDepartingTime(getDepartingTime(tc1.getTrainNumber(), f));
+				result.getSearchResponse().add(response);
+			}
+			else{
+				//Since this is intermediary station and passenger can only stop for max 2 hours, so we need to give him one amongst next 8 coming trains (as next 2 hours will have 8 coming trains)
+				int nextTrainIndex = i+1;
+				for(int j = nextTrainIndex; j<=8 ; j++){
+					tc2 = lst.get(j);
+					//checking if that the train is express then it must be stopping at both the travelling stations
+					if(tc1.getTrainNumber().endsWith("00")){
+						if(!expressStations.contains(lastAccomodatedStation) || !expressStations.contains(s.arrivalStation1)){continue;}
+					}
+					int currentStation = lastAccomodatedStation - 'A';
+					char targetStation = canAccomodate(currentStation, t, tc2, s);
+					//if we find one such train, we take our 1st train and the current connecting train and put them into response
+					if(targetStation == (char)('A' + (t-1))){
+						if(Integer.parseInt(getDepartingTime(tc1.getTrainNumber(), f)) > Integer.parseInt(getDepartingTime(tc2.getTrainNumber(), lastAccomodatedStation))){continue;}
+						SearchResponse response = new SearchResponse();
+						SearchResponse response1 = new SearchResponse();
+						SearchResponse response2 = new SearchResponse();
+						response1.setTrainNumber(tc1.getTrainNumber());
+						response2.setTrainNumber(tc2.getTrainNumber());
+						response1.setDepartingStation(s.departingStation1);
+						response2.setDepartingStation(lastAccomodatedStation);
+						response1.setArrivalStation(lastAccomodatedStation);
+						response2.setArrivalStation(s.arrivalStation1);
+						response1.setDepartingTime(getDepartingTime(tc1.getTrainNumber(), f));
+						response2.setDepartingTime(getDepartingTime(tc2.getTrainNumber(), lastAccomodatedStation));
+						response.getConnected().add(response1);
+						response.getConnected().add(response2);
+						result.getSearchResponse().add(response);
+						break;
+ 					}
+				}
+			}
+			if(++count>=5){break;}
+		}
 	}
 
 	private char canAccomodate(int f, int t, TrainCapacity tc, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -179,23 +221,58 @@ public class TrainController {
 		return c;
 	}
 
-	public void getNoneConnectionTrains(List<SearchResponse> result, List<TrainCapacity> lst, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JSONException{
+	public void getNoneConnectionTrains(SearchResult result, List<TrainCapacity> lst, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JSONException{
 		int count = 0;
 		int f = s.departingStation1 - 'A';
 		int t = s.arrivalStation1 - 'A';
+		TrainCapacity tc;
+		List<Character> expressStations = new ArrayList<Character>();
+		expressStations.add('A');
+		expressStations.add('F');
+		expressStations.add('K');
+		expressStations.add('P');
+		expressStations.add('U');
+		expressStations.add('Z');
 		//System.out.println("FROM IS " + f + " DESTINATION IS " + t + " Passenger wants " + s.passengerCount + " seats");
-		for(TrainCapacity tc : lst){
+		for(int i = 0; i<lst.size(); i++){
+			tc = lst.get(i);
+			//if this is express train then TO and FROM both must be Express Stations
+			if(tc.getTrainNumber().endsWith("00")){
+				if(!expressStations.contains(s.departingStation1) || !expressStations.contains(s.arrivalStation1)){continue;}
+			}
 			char lastAccomodatedStation = canAccomodate(f, t, tc, s);
 			if(lastAccomodatedStation == (char)('A' + (t-1))){
 				SearchResponse response = new SearchResponse();
 				response.setTrainNumber(tc.getTrainNumber());
 				response.setDepartingStation(s.departingStation1);
 				response.setArrivalStation(s.arrivalStation1);
-				result.add(response);
+				response.setDepartingTime(getDepartingTime(tc.getTrainNumber(), f));
+				result.getSearchResponse().add(response);
 				count++;
 			}
 			if(count>=5){break;}
 		}
+	}
+	private String getDepartingTime(String trainNumber, int f) {
+		// TODO Auto-generated method stub
+		if(trainNumber.endsWith("0600")){return "06:00";} // if its the first station, no need to calculate any duration
+		String type = trainNumber.endsWith("00")?"Express":"Regular";
+		String departingTime = "";
+		int timeTravelled = 0;
+		if(type.equals("Express")){
+			
+			int start = 1;
+			while(start++ <= f){
+				timeTravelled +=5; // duration to travel to next station
+				if(start%5 == 0){timeTravelled +=3;}  // duration of stopping at that station
+			}
+		}else{timeTravelled = (f - 0)*8;}
+		int startingTimeInMinutes = Integer.parseInt(trainNumber.substring(2));
+		int departingTimeinMinutes = ((startingTimeInMinutes/100)*60 + (startingTimeInMinutes%100) + timeTravelled);
+		String hours = (departingTimeinMinutes/60<10)?("0" + departingTimeinMinutes/60):(String.valueOf(departingTimeinMinutes/60)) + ":" ;
+		String minutes =  (departingTimeinMinutes%60<10)?("0" + departingTimeinMinutes%60):(String.valueOf(departingTimeinMinutes%60));
+		System.out.println("Hours " + hours + " Minutes " + minutes);
+		return (hours + ":" + minutes);
 	}
 //END: AASHI/PRNAJALI
 	
@@ -217,7 +294,7 @@ public class TrainController {
 //    		return new ResponseEntity<>("BadRequest",HttpStatus.BAD_REQUEST);
 //    	}
 //    }
-    
+
 	// Put request to cancel train
 	//add date
     @RequestMapping(value = "/trains/canceltrain/{id}", method = RequestMethod.PUT)
