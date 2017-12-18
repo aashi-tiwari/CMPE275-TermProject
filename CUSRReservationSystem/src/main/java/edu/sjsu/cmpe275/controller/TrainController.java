@@ -112,7 +112,7 @@ public class TrainController {
 			
 			System.out.println("************in getTrain lst.size= "+lst.size());
     		//START: AASHI/PRANJALI
-			  List<TrainCapacity> result = getTrains(lst, s);
+			  List<SearchResponse> result = getTrains(lst, s);
 	          return new ResponseEntity<>(result, HttpStatus.OK);
 	       //END: AASHI/PRNAJALI
     	}
@@ -123,9 +123,9 @@ public class TrainController {
 }
     //START: AASHI/PRANJALI
 	//helper method to select top 5 trains
-	private List<TrainCapacity> getTrains(List<TrainCapacity> lst, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JSONException {
+	private List<SearchResponse> getTrains(List<TrainCapacity> lst, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JSONException {
 		// TODO Auto-generated method stub
-		List<TrainCapacity> result = new ArrayList<TrainCapacity>();
+		List<SearchResponse> result = new ArrayList<SearchResponse>();
 		
 		if(s.connections.equals("None")){getNoneConnectionTrains(result, lst, s);}
 		else if(s.connections.equals("One")){getOneConnectionTrains(result, lst, s, 0);}
@@ -133,33 +133,33 @@ public class TrainController {
 		return result;
 	}
 
-	private void getAnyConnectionTrains(List<TrainCapacity> result, List<TrainCapacity> lst, SearchWrapper s) {
+	private void getAnyConnectionTrains(List<SearchResponse> result, List<TrainCapacity> lst, SearchWrapper s) {
 		// TODO Auto-generated method stub
 	}
 
-	private void getOneConnectionTrains(List<TrainCapacity> result, List<TrainCapacity> lst, SearchWrapper s, int currentConnections) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		System.out.println("SELECTING DIRECT TRAINS from station " + s.departingStation1 + " To station " + s.arrivalStation1);
-		//List<TrainCapacity> result = new ArrayList<TrainCapacity>();
-		int count = 0;
-		int f = s.departingStation1 - 'A';
-		int t = s.arrivalStation1 - 'A';
-		TrainCapacity one;
-		TrainCapacity two;
-		TrainCapacity tc;
-		for(int i = 0; i< lst.size(); i++){
-			tc = lst.get(i);
-			char lastAccomodatedStation = canAccomodate(f, t, tc, s);
-			if(lastAccomodatedStation == (char)('A' + (t-1))){
-				result.add(tc);
-				count++;
-			}
-			else if(currentConnections <1){
-				currentConnections++;
-				one = tc;
-				System.out.println("Connecting train could be " + tc.getTrainNumber());
-			}
-			if(count>=5){break;}
-		}
+	private void getOneConnectionTrains(List<SearchResponse> result, List<TrainCapacity> lst, SearchWrapper s, int currentConnections) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+//		System.out.println("SELECTING DIRECT TRAINS from station " + s.departingStation1 + " To station " + s.arrivalStation1);
+//		//List<TrainCapacity> result = new ArrayList<TrainCapacity>();
+//		int count = 0;
+//		int f = s.departingStation1 - 'A';
+//		int t = s.arrivalStation1 - 'A';
+//		TrainCapacity one;
+//		TrainCapacity two;
+//		TrainCapacity tc;
+//		for(int i = 0; i< lst.size(); i++){
+//			tc = lst.get(i);
+//			char lastAccomodatedStation = canAccomodate(f, t, tc, s);
+//			if(lastAccomodatedStation == (char)('A' + (t-1))){
+//				result.add(tc);
+//				count++;
+//			}
+//			else if(currentConnections <1){
+//				currentConnections++;
+//				one = tc;
+//				System.out.println("Connecting train could be " + tc.getTrainNumber());
+//			}
+//			if(count>=5){break;}
+//		}
 	}
 
 	private char canAccomodate(int f, int t, TrainCapacity tc, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -179,12 +179,7 @@ public class TrainController {
 		return c;
 	}
 
-	public void getNoneConnectionTrains(List<TrainCapacity> result, List<TrainCapacity> lst, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JSONException{
-		System.out.println("SELECTING DIRECT TRAINS from station " + s.departingStation1 + " To station " + s.arrivalStation1);
-		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("Name", "Pranjali");
-		System.out.println("Json object set is " + jsonObj);
-		System.out.println("Json object set is " + jsonObj.getString("Name"));
+	public void getNoneConnectionTrains(List<SearchResponse> result, List<TrainCapacity> lst, SearchWrapper s) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JSONException{
 		int count = 0;
 		int f = s.departingStation1 - 'A';
 		int t = s.arrivalStation1 - 'A';
@@ -192,7 +187,11 @@ public class TrainController {
 		for(TrainCapacity tc : lst){
 			char lastAccomodatedStation = canAccomodate(f, t, tc, s);
 			if(lastAccomodatedStation == (char)('A' + (t-1))){
-				result.add(tc);
+				SearchResponse response = new SearchResponse();
+				response.setTrainNumber(tc.getTrainNumber());
+				response.setDepartingStation(s.departingStation1);
+				response.setArrivalStation(s.arrivalStation1);
+				result.add(response);
 				count++;
 			}
 			if(count>=5){break;}
