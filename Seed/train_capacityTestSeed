@@ -619,13 +619,13 @@ insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e
 
 
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0600",DATE '2017-12-18', 3, 3, 3, 3);
-insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0615",DATE '2017-12-18', 3, 3, 3, 3);
-insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0630",DATE '2017-12-18', 3, 3, 3, 3);
+insert into train_capacity (train_number, travel_date) values ("SB0615",DATE '2017-12-18');
+insert into train_capacity (train_number, travel_date) values ("SB0630",DATE '2017-12-18');
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0645",DATE '2017-12-18', 3, 3, 3, 3);
-insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0700",DATE '2017-12-18', 3, 3, 3, 3);
+insert into train_capacity (train_number, travel_date) values ("SB0700",DATE '2017-12-18');
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0715",DATE '2017-12-18', 3, 3, 3, 3);
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0730",DATE '2017-12-18', 3, 3, 3, 3);
-insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0745",DATE '2017-12-18', 3, 3, 3, 3);
+insert into train_capacity (train_number, travel_date) values ("SB0745",DATE '2017-12-18');
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0800",DATE '2017-12-18', 3, 3, 3, 3);
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0815",DATE '2017-12-18', 3, 3, 3, 3);
 insert into train_capacity (train_number, travel_date, c_capacity, d_capacity, e_capacity, f_capacity) values ("SB0830",DATE '2017-12-18', 3, 3, 3, 3);
