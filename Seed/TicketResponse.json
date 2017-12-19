@@ -1,0 +1,36 @@
+// After saving the ticket
+
+{
+    "ticketResponse": [
+        {
+            "id": 8,
+            "transactionId": "7170590d-966a-4f36-845f-1094e99154d5",
+            "trainNumber": "SB0645",
+            "email": "abc@xyz",
+            "passengerCount": 4,
+            "connections": "One",
+            "ticketType": "Any",
+            "departingStation": "A",
+            "arrivalStation": "C",
+            "travelDate": "2017-12-18",
+            "departureTime": "06:45",
+            "arrivalTime": "06:58",
+            "fare": 3
+        },
+        {
+            "id": 9,
+            "transactionId": "7170590d-966a-4f36-845f-1094e99154d5",
+            "trainNumber": "SB0745",
+            "email": "abc@xyz",
+            "passengerCount": 4,
+            "connections": "One",
+            "ticketType": "Any",
+            "departingStation": "C",
+            "arrivalStation": "D",
+            "travelDate": "2017-12-18",
+            "departureTime": "08:01",
+            "arrivalTime": "08:06",
+            "fare": 3
+        }
+    ]
+}
