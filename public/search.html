@@ -1,0 +1,122 @@
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+.parenttbl{
+  background-color: white;
+  border: 1px solid black;
+  height: 700px;
+  width: 1590px;
+}
+.childtbl{
+    border: 1px solid black;
+    position: relative;
+    height: 320px;
+    width: 650px;
+    top: -120px;
+    left: 10px;
+}
+select{
+  width: 50px;
+}
+.center {
+    position: absolute;
+    left: -430px;
+    top: -20px;
+    text-align: center;
+    font-size: 18px;
+}
+</style>
+</head>
+<body>
+<form>
+  <div class="center">
+  <table class="parenttbl">
+    <tr>
+        <td width="50%" class="parenttbl">
+          <table class="childtbl">
+            <th>Search</th>
+            <tr>
+              <td>
+                <label>*From Station :
+                <select ng-model="search_query.departingStation1" ng-options="stationName for stationName in names">
+                </select>
+                </label>
+                <br/>
+                  <label>*To Station :
+                  <select ng-model="search_query.arrivalStation1" ng-options="stationName for stationName in names">
+                  </select>
+                </label>
+                  <br/>
+                  <br/>
+                  <label>
+                  *Date:
+                  <input ng-model="search_query.departingDate1" type="date"></input>
+                  </label>
+                  <br/>
+                  <br/>
+
+                  <label>*Trip Type : </label>
+                  <input type="radio" ng-model="search_query.isRoundTrip" value="false">
+                     One-way
+                  </input>
+
+                  <input type="radio" ng-model="search_query.isRoundTrip" value="true">
+                     Round-Trip
+                  </input>
+                  <br/>
+                  <label>Ticket Type : </label>
+                  <input type="radio" ng-model="search_query.ticketType" value="regular">
+                     Regular
+                  </input>
+
+                  <input type="radio" ng-model="search_query.ticketType" value="express">
+                     Express
+                  </input>
+
+                  <input type="radio" ng-model="search_query.ticketType" value="any">
+                     Any
+                  </input>
+                </br>
+                <label>Connection Type : </label>
+                <input type="radio" ng-model="search_query.connectionType" value="none">
+                   None
+                </input>
+
+                <input type="radio" ng-model="search_query.connectionType" value="one">
+                   One
+                </input>
+
+                <input type="radio" ng-model="search_query.connectionType" value="any">
+                   Any
+                </input>
+                <br/>
+                <label>Exact Time:
+                <select ng-model="search_query.exactTime1" ng-options="time for time in times">
+                </select>
+                </label>
+                <br/>
+                <label>Nu of Passenger :
+                <input type="text" ng-model="search_query.passengerCount">
+                </label>
+                <br/>
+                <input type="button" ng-click = "search_Trains()" class="btn btn-primary" value="Search">
+                </input>
+              </td>
+            </tr>
+          </table>
+        </td>
+
+          <td width="20%" class="parenttbl">
+              <h3>I am second</h3>
+          </td>
+
+            <td width="20%" class="parenttbl">
+                <h3>I am third</h3>
+            </td>
+      </tr>
+    </table>
+  </div>
+</form>
+</body>

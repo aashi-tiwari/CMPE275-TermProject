@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="stylesheets/style.css">
+<!--<body ng-app="myApp">
+
+<p><a href="#/!">Main</a></p>
+<a href="#!login">Login</a>
+<a href="#!register">Register</a>
+-->
+
+<head>
+<style>
+h1 {
+	background-image: url("background.jpg");
+  background-color: #cccccc;
+}
+body{
+	background-image: url("http://www.bombardier.com/content/dam/Websites/bombardiercom/Projects/zefiro-electric-multiple-unit-5448.jpg/_jcr_content/renditions/original");
+  background-repeat: no-repeat;
+	background-position: center;
+  background-size: cover;
+	height: 450px;
+	}
+	.container {
+    position: relative;
+}
+</style>
+</head>
+
+<body ng-app="myApp" ng-submit="onGoogleLogin()" class="container">
+		<div id='main' class="container">
+			<nav class="navbar-fluid navbar-default navbar-fixed-top">
+				<div class="container">
+					<p class="navbar-left navbar-text"><a href="#/!"> Home </a></p>
+					<p class="navbar-text"> CUSR Reservation System</p>
+
+					<!--<p class="navbar-right navbar-text" ng-hide='authenticated'><a href="#!login"><h4><b>Sign in</b></h4></a></p>-->
+					<p class='navbar-right navbar-text' ng-show='authenticated'><a href='#' ng-click='signout()'>Logout</a></p>
+					<p class='navbar-right navbar-text' ng-show='authenticated'>Hi,{{current_user}}</p>
+				</div>
+			</nav>
+			<!--<img src="http://www.bombardier.com/content/dam/Websites/bombardiercom/Projects/zefiro-electric-multiple-unit-5448.jpg/_jcr_content/renditions/original" alt="Train" ng-hide='authenticated' style="width:1200px;height:228px;">
+			<h1>Hello</h1>
+			<input type="submit" value="Login with Google" class="loginBtn loginBtn--google" />
+			<button ng-click="fbLogin()" value="Login with Facebook" class="loginBtn loginBtn--facebook"/>
+			--><div class="col-md-offset-2 col-md-8">
+				<div ng-view>
+				</div>
+			</div>
+		</div>
+
+
+<!--<div ng-view></div>-->
+<script type = "text/javascript" src="connect.js"></script>
+<script type="text/javascript">
+(function(){
+	var p = document.createElement('script');
+	p.type = 'text/javascript';
+	p.async = true;
+	p.src = 'https://apis.google.com/js/client.js?onload=onLoadFunction';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(p, s);
+})();
+</script>
+<script>
+var app = angular.module("myApp", ["ngRoute"]).run(function($rootScope,$http){
+	$rootScope.authenticated = false;
+	$rootScope.current_user = "";
+	$rootScope.signout = function()
+	{
+		$http.get('auth/signout');
+		$rootScope.authenticated = false;
+		$rootScope.current_user = "";
+	};
+
+});
+app.config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+        templateUrl : "login.htm",
+				controller : "authController"
+    })
+		.when("/reset", {
+        templateUrl : "reset_password.htm",
+        controller : "authController"
+
+    })
+
+		.when("/login", {
+        templateUrl : "login.htm",
+        controller : "authController"
+
+    })
+
+		.when("/exam",{
+			templateUrl : "exam_page.html",
+			controller : "authController"
+		})
+
+		.when("/search",{
+			templateUrl : "search.html",
+			controller : "authController"
+		})
+
+		.when("/register", {
+        templateUrl : "register.htm",
+        controller : "authController"
+    });
+});
+app.controller('authController', function($scope, $http, $rootScope, $location, $window){
+  //$scope.user = {name: 'Sayali', email:'Sayali@yahoo.com',password: 'test'};
+		$scope.user = {name: '',email:'',password:''};
+		$scope.trip = {
+        type: 'one-way'
+      };
+			$scope.ticket = {
+	        type: 'any'
+	      };
+				$scope.connection = {
+		        type: 'any'
+		      };
+	  $scope.names = ["A", "B", "C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+		$scope.email = {
+			user_name : '',
+			email : ''
+		};
+
+		$scope.search_query = {
+			departingStation1 : '',
+			arrivalStation1 : '',
+			departingDate1 : '',
+			exactTime1 : '',
+			ticketType : '',
+			departingDate2  : '',
+			isRoundTrip : false,
+			passengerCount : '',
+			connectionType : ''
+		};
+
+		$scope.times = ["6:00","6:15","6:30","6:45",
+										"7:00","7:15","7:30","7:45",
+										"8:00","8:15","8:30","8:45",
+										"9:00","9:15","9:30","9:45",
+										"10:00","10:15","10:30","10:45",
+										"11:00","11:15","11:30","11:45",
+										"12:00","12:15","12:30","12:45",
+										"13:00","13:15","13:30","13:45",
+										"14:00","14:15","14:30","14:45",
+										"15:00","15:15","15:30","15:45",
+										"16:00","16:15","16:30","16:45",
+										"17:00","17:15","17:30","17:45",
+										"18:00","18:15","18:30","18:45",
+										"19:00","19:15","19:30","19:45",
+										"20:00","20:15","20:30","20:45",
+										"21:00"];
+
+$scope.login = function()
+{
+	/*
+	$http.post('/auth/login', $scope.user).success(function(data){
+
+		   console.log("Before If..........");
+       if(data.state == 'success'){
+				 console.log("Debug 1:Login If..........");
+         $rootScope.authenticated = true;
+         $rootScope.current_user = data.user.username;
+         $location.path('/reset');
+       }
+       else{
+				 console.log("Debug 2:Login else..........");
+         $scope.error_message = data.message;
+       }
+			 console.log("After If..........");
+     });*/
+		 console.log("Request : ",$scope.user);
+		 $http.post('http://localhost:8080/CUSR/loginUser', $scope.user).then(function successCallback(response){
+
+		 		 console.log("After Post..........",response);
+
+				 			if(response.status == 200){
+				 				console.log("Debug 1:Login If..........");
+				 				$location.path('/exam');
+				 			}
+						},
+							function errorCallback(response) {
+								console.log('Username does not exists');
+								$window.location.reload();
+					});
+};
+				 //console.log(response.data.state);
+				 //console.log(response.data.user.username);
+
+		 		 /*if(response.data.state == 'success'){
+		 			 console.log("Debug 1:Login If..........");
+		 			 /*$rootScope.authenticated = true;
+		 			 $rootScope.current_user = response.data.user.username;
+					 $scope.error_message = response.message;
+		 			 $location.path('/exam');
+		 		 }
+		 		 else{
+		 			 console.log("Debug 2:Login else..........");
+		 			 $scope.error_message = response.message;
+		 		 }
+		 		 console.log("After If..........");*/
+
+
+
+
+
+$scope.fbLogin = function()
+{
+	FB.login(function(response){
+		if(response.authResponse){
+			FB.api('/me','GET',{fields:'email, first_name, name, id, picture'}, function(response){
+				$scope.$apply(function(){
+					$scope.email.user_name = response.name;
+					$scope.email.email = response.email;
+					$rootScope.authenticated = true;
+          $rootScope.current_user = response.name;
+					console.log("Request : ",$scope.email.email);
+		 		 $http.post('http://localhost:8080/CUSR/loginUser', $scope.email.email).then(function successCallback(response){
+
+		 		 		 console.log("After Post..........",response);
+
+		 				 			if(response.status == 200){
+		 				 				console.log("Debug 1:Login If..........");
+		 				 			}
+		 						},
+		 							function errorCallback(response) {
+		 								console.log('Username does not exists');
+		 								$window.location.reload();
+		 					});
+					$location.path('/search');
+				});
+			});
+		}
+		else {
+		 //error
+		}
+	}
+	,{
+	scope : 'email, user_likes',
+	return_scopes : true
+	}
+)
+};
+
+$scope.search_Trains = function()
+{
+		console.log('In search' + $scope.search_query.departingStation1);
+		console.log('In search' + $scope.search_query.arrivalStation1);
+		console.log('In search' + $scope.search_query.departingDate1);
+		console.log('In search' + $scope.search_query.exactTime1);
+		console.log('In search' + $scope.search_query.departingDate2);
+		console.log('In search' + $scope.search_query.ticketType);
+		console.log('In search' + $scope.search_query.isRoundTrip);
+		console.log('In search' + $scope.search_query.connectionType);
+		console.log('In search' + $scope.search_query.passengerCount);
+		$http.post('http://localhost:8080/CUSR/trains', $scope.search_query).then(function successCallback(response){
+
+				console.log("After Post..........",response);
+
+						 if(response.status == 200){
+							 console.log("Debug 1:Search Suceess........." + response.data);
+						 }
+					 },
+						 function errorCallback(response) {
+							 console.log('Error Search');
+				 });
+
+};
+
+$scope.onGoogleLogin = function()
+{
+	console.log('In called');
+	var params = {
+		'clientid' : '808321520558-l901rd3bf1s8cdr8edlecn95239i4pbl.apps.googleusercontent.com',
+		'cookiepolicy' : 'single_host_origin',
+		'callback' : function(result){
+			if(result['status']['signed_in']){
+				var request = gapi.client.plus.people.get(
+					{
+						'userId' : 'me'
+					}
+				);
+				request.execute(function(resp){
+					$scope.$apply(function(){
+						$scope.email.user_name = resp.displayName;
+						$scope.email.email = resp.emails[0].value;
+						$rootScope.authenticated = true;
+	          $rootScope.current_user = resp.displayName;
+						$location.path('/search');
+					});
+				});
+			}
+
+		},
+		'approvalprompt' : 'force',
+		'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+	};
+	gapi.auth.signIn(params);
+};
+
+$scope.register = function()
+{
+	/*if($scope.password == $scope.password1)
+	{
+		console.log('Passwords are same');
+	}
+	else {
+		console.log('Password different');
+	}*/
+	console.log("Request : ",$scope.user);
+	$http.post('http://localhost:8080/CUSR/registerUser', $scope.user).then(function successCallback(response){
+
+			console.log("After Post..........",response);
+			console.log(response.status);
+			//console.log(response.data.user.username);
+
+			if(response.status == 200){
+				console.log("Debug 1:Register If..........");
+				$location.path('/login');
+			}
+			else if(response.status == 208){
+				console.log('In else');
+				   $window.location.reload();
+			}
+
+		},
+		function errorCallback(response) {
+			console.log('Username already exists');
+});
+				/*$rootScope.authenticated = true;
+				$rootScope.current_user = response.data.user.username;
+				$scope.error_message = response.message;
+
+			}
+			else{
+				console.log("Debug 2:Login else..........");
+				$scope.error_message = response.message;
+			}
+			console.log("After If..........");*/
+
+};
+
+});
+
+</script>
+
+</body>
+</html>

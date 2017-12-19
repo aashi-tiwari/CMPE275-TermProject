@@ -1,0 +1,48 @@
+<head>
+	<style>
+	table, td {
+		background-color: white;
+    border: 1px solid black;
+		height: 100px;
+		width: 420px;
+}
+th{
+	position: relative;
+	left: 140px;
+}
+.center {
+    position: absolute;
+    left: 200px;
+    top: 150px;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<form ng-submit="onGoogleLogin()">
+	<!--<h2>Log In</h2>
+	<p class="text-warning">{{error_message}}</p>-->
+<div class="center">
+	<table>
+		<th>
+			<h2><b>Log In</b></h2>
+		</th>
+		<tr>
+			<td>
+	<input type="submit" value="Login with Google" class="loginBtn loginBtn--google" />
+	<button ng-click="fbLogin()" value="Login with Facebook" class="loginBtn loginBtn--facebook">
+		Login with Facebook</button>
+	</td>
+	</tr>
+</table>
+</div>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+  <!--<br></br>
+	<h4>{{email.user_name}}</h4>
+	<h4>{{email.email}}</h4>-->
+	</form>
