@@ -30,6 +30,7 @@
             "departingDate1": "2017-12-18",
             "departingDate2": null,
             "connections": null,
+            "userId": "abc@xyz",
             "ticketType": null,
             "connected": [
                 {
