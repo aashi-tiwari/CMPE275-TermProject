@@ -1,5 +1,29 @@
 // After saving the ticket
 
+//DIRECT TICKET RESPONSE:
+
+{
+    "ticketResponse": [
+        {
+            "id": 10,
+            "transactionId": "65a20ed0-8ee9-4718-82df-473365c532f6",
+            "trainNumber": "SB0630",
+            "email": null,
+            "passengerCount": 4,
+            "connections": "One",
+            "ticketType": "Any",
+            "departingStation": "A",
+            "arrivalStation": "D",
+            "travelDate": "2017-12-18",
+            "departureTime": "06:30",
+            "arrivalTime": "06:51",
+            "fare": 2
+        }
+    ]
+}
+
+//ONE CONNECTION TICKET RESPONSE
+
 {
     "ticketResponse": [
         {
