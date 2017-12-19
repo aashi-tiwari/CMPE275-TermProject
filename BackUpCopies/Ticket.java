@@ -18,14 +18,15 @@ public class Ticket {
 	private long id;
 	
 	//Transaction Id generated in POST is populated here
-	private long transactionId;
-	
+	//START: P-A changed type of TransactionId from long to String
+	private String transactionId;
+	//END: P-A changed type of TransactionId from long to String
 	private String trainNumber;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="userId")
 	private User user;
-	
+
 	//Start changes: P-S
 	//Additional variables stored in order to store original search criteria
 	private int passengerCount;
@@ -38,13 +39,12 @@ public class Ticket {
 	private Character arrivalStation;
 	
 	private Date travelDate;
+	//START: Changed below types from time to String
+	private String departureTime;
 	
-	private Time departureTime;
-	
-	private Time arrivalTime;
-	
+	private String arrivalTime;
+	//END: Changed below types from time to String
 	private int fare;
-	
 	public long getId() {
 		return id;
 	}
@@ -85,19 +85,19 @@ public class Ticket {
 		this.travelDate = travelDate;
 	}
 
-	public Time getDepartureTime() {
+	public String getDepartureTime() {
 		return departureTime;
 	}
 
-	public void setDepartureTime(Time departureTime) {
+	public void setDepartureTime(String departureTime) {
 		this.departureTime = departureTime;
 	}
 
-	public Time getArrivalTime() {
+	public String getArrivalTime() {
 		return arrivalTime;
 	}
 
-	public void setArrivalTime(Time arrivalTime) {
+	public void setArrivalTime(String arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
 
@@ -132,7 +132,20 @@ public class Ticket {
 	public void setTicketType(String ticketType) {
 		this.ticketType = ticketType;
 	}
+	public String getTransactionId() {
+		return transactionId;
+	}
 
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 	//End: P-S
 
 }
