@@ -115,56 +115,20 @@ public class TrainController {
 			
 			List<TrainCapacity> onewayLst = new ArrayList<TrainCapacity>();
 			List<TrainCapacity> returnLst = new ArrayList<TrainCapacity>();
-			List<TrainCapacity> lst = onewayLst;
+			//List<TrainCapacity> lst = onewayLst;
 			System.out.println("************in getTrain direction="+direction);
 			System.out.println("************in getTrain returnDirection="+returnDirection);
 			
 			if(!s.isRoundTrip){
-				//If both exact time and REgular train specified
-				if(s.isExactTime && s.ticketType.equalsIgnoreCase("Regular")){
-					if(s.exactTime1!=null)
-						onewayLst=trainCapacityRepository.searchTrains_ExactTime_Type(direction,s.departingDate1,s.exactTime1,"Regular");
-				}//If only exact time specified
-				else if(s.isExactTime){
-					if(s.exactTime1!=null)
-						onewayLst=trainCapacityRepository.searchTrainsByExactTime(direction,s.departingDate1,s.exactTime1);
-				}//If only Train type "REgular" specified
-				else if(s.ticketType.equalsIgnoreCase("Regular"))
+				//If Train type "REgular" specified
+				if(s.ticketType.equalsIgnoreCase("Regular"))
 					onewayLst=trainCapacityRepository.searchTrainsWithType(direction,s.departingDate1,"Regular");
 				else
 					onewayLst=trainCapacityRepository.searchTrains(direction,s.departingDate1);
 			}//Round trip searches
 			else{
-				//If both exact time and REgular train specified
-				if(s.isExactTime && s.ticketType.equalsIgnoreCase("Regular")){
-					//If exact time for 1st trip mentioned
-					if(s.exactTime1!=null)
-						onewayLst=trainCapacityRepository.searchTrains_ExactTime_Type(direction,s.departingDate1,s.exactTime1,"Regular");
-					else//Do not apply exact time filter
-						onewayLst=trainCapacityRepository.searchTrainsWithType(direction,s.departingDate1,"Regular");
-					
-					//If exact time for return trip mentioned
-					if(s.exactTime2!=null)
-						returnLst=trainCapacityRepository.searchTrains_ExactTime_Type(returnDirection,s.departingDate2,s.exactTime2,"Regular");
-					else{//Do not apply exact time filter
-						System.out.println("=========here"+s.departingDate2);
-						returnLst=trainCapacityRepository.searchTrainsWithType(returnDirection,s.departingDate2,"Regular");
-					}
-					
-				}//If only exact time specified
-				else if(s.isExactTime){
-					if(s.exactTime1!=null)
-						if(s.exactTime1!=null)
-							onewayLst=trainCapacityRepository.searchTrainsByExactTime(direction,s.departingDate1,s.exactTime1);
-						else//Do not apply exact time filter
-							onewayLst=trainCapacityRepository.searchTrains(direction,s.departingDate1);
-						
-						if(s.exactTime2!=null)
-							returnLst=trainCapacityRepository.searchTrainsByExactTime(returnDirection,s.departingDate2,s.exactTime2);
-						else//Do not apply exact time filter
-							returnLst=trainCapacityRepository.searchTrains(returnDirection,s.departingDate2);
-				}//If only Train type "REgular" specified
-				else if(s.ticketType.equalsIgnoreCase("Regular")){
+				//If Train type "REgular" specified
+				if(s.ticketType.equalsIgnoreCase("Regular")){
 					onewayLst=trainCapacityRepository.searchTrainsWithType(direction,s.departingDate1,"Regular");
 					returnLst=trainCapacityRepository.searchTrainsWithType(returnDirection,s.departingDate2,"Regular");
 				}
@@ -176,9 +140,9 @@ public class TrainController {
 			
 			System.out.println("************in getTrain onewayLst.size= "+onewayLst.size());
 			System.out.println("************in getTrain returnLst.size= "+returnLst.size());
-			lst=onewayLst;
+			//lst=onewayLst;
 			//START: AASHI/PRANJALI
-			SearchResult result = getTrains(lst, s);
+			SearchResult result = getTrains(onewayLst, s);
 	        return new ResponseEntity<>(result, HttpStatus.OK);
 	       //END: AASHI/PRNAJALI
     	}
