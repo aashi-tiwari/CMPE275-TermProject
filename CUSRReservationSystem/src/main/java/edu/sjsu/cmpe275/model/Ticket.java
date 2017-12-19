@@ -14,13 +14,14 @@ public class Ticket {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	//private long userId;
+	//Transaction Id generated in POST is populated here
+	private long transactionId;
 	
 	private String trainNumber;
 	
-	private String departingStation;
+	private Character departingStation;
 	
-	private String arrivalStation;
+	private Character arrivalStation;
 	
 	private Date travelDate;
 	
@@ -52,19 +53,19 @@ public class Ticket {
 		this.trainNumber = trainNumber;
 	}
 	
-	public String getDepartingStation() {
+	public Character getDepartingStation() {
 		return departingStation;
 	}
 
-	public void setDepartingStation(String departingStation) {
+	public void setDepartingStation(Character departingStation) {
 		this.departingStation = departingStation;
 	}
 
-	public String getArrivalStation() {
+	public Character getArrivalStation() {
 		return arrivalStation;
 	}
 
-	public void setArrivalStation(String arrivalStation) {
+	public void setArrivalStation(Character arrivalStation) {
 		this.arrivalStation = arrivalStation;
 	}
 

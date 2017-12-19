@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
 * <p>This is the model class, to form the responses with specific codes and messages</p>
 * <title>Group 6</title>
-* @author  Suchishree Jena, Pranjali Shrivastava, Aashi Tiwari
+* @author  Aashi Tiwari, Pranjali Shrivastava, Sayali More, Snehal Phatangare
 * @version 1.0
 * @since   2017-11-22 
 */

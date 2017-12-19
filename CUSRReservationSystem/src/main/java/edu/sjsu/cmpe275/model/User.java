@@ -25,27 +25,23 @@ public class User {
 	private long id;
 	
 	@NotNull
-	private String name;
+	private String firstname;
 	
 	@NotNull
-	private String password;
+	private String lastname;
 	
 	@NotNull
 	@Column(unique=true)
 	private String email;
 	
+	@NotNull
+	@Column(unique=true)
+	private String username;
 	
 	@OneToMany
 	@JoinTable(name="Reservations")
     //@JsonIgnoreProperties({"opponents"})
 	private List<Ticket> tickets;
-
-	public User(String name, String email, String password) {
-		// TODO Auto-generated constructor stub
-		this.name = name;
-		this.email = email;
-		this.password = password;
-	}
 
 	public long getId() {
 		return id;
@@ -55,20 +51,20 @@ public class User {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getLastname() {
+		return lastname;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	public String getEmail() {
@@ -79,6 +75,13 @@ public class User {
 		this.email = email;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	
 	public List<Ticket> getTickets() {
 		return tickets;

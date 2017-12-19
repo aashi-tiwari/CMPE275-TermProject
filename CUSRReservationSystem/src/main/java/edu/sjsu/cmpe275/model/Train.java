@@ -17,11 +17,22 @@ public class Train {
 	
 	private int capacity;
 	
-	private Time startTime;
+	private int startTime;
 	
 	private String status;
 	
+	public Train(){
+	}
 	
+	public Train(String trainNumber,String type,String direction,int capacity,int startTime,String status){
+		this.trainNumber=trainNumber;
+		this.type=type;
+		this.direction=direction;
+		this.capacity=capacity;
+		this.startTime=startTime;
+		this.status=status;
+    }
+
 	public String getStatus() {
 		return status;
 	}
@@ -62,11 +73,11 @@ public class Train {
 		this.capacity = capacity;
 	}
 
-	public Time getStartTime() {
+	public int getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Time startTime) {
+	public void setStartTime(int startTime) {
 		this.startTime = startTime;
 	}
 }
