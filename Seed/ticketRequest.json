@@ -1,0 +1,64 @@
+// No connection booking request
+
+{
+            "trainNumber": "SB0615",
+            "departingStation": "A",
+            "arrivalStation": "D",
+            "departingTime": "06:15",
+            "arrivalTime": "06:36",
+            "fare": "$2",
+            "passengerCount": 4,
+            "departingDate1": "2017-12-18",
+            "departingDate2": null,
+            "connections": "One",
+            "userId": "abc@xyz",
+            "ticketType": "Any",
+            "connected": []
+        }
+
+
+// One connection Booking request
+
+{
+            "trainNumber": null,
+            "departingStation": "\u0000",
+            "arrivalStation": "\u0000",
+            "departingTime": null,
+            "arrivalTime": null,
+            "fare": "$3",
+            "passengerCount": 4,
+            "departingDate1": "2017-12-18",
+            "departingDate2": null,
+            "connections": null,
+            "ticketType": null,
+            "connected": [
+                {
+                    "trainNumber": "SB0645",
+                    "departingStation": "A",
+                    "arrivalStation": "C",
+                    "departingTime": "06:45",
+                    "arrivalTime": "06:58",
+                    "fare": "$2",
+                    "passengerCount": 4,
+                    "departingDate1": "2017-12-18",
+                    "departingDate2": null,
+                    "connections": "One",
+                    "ticketType": "Any",
+                    "connected": []
+                },
+                {
+                    "trainNumber": "SB0745",
+                    "departingStation": "C",
+                    "arrivalStation": "D",
+                    "departingTime": "08:01",
+                    "arrivalTime": "08:06",
+                    "fare": "$2",
+                    "passengerCount": 4,
+                    "departingDate1": "2017-12-18",
+                    "departingDate2": null,
+                    "connections": "One",
+                    "ticketType": "Any",
+                    "connected": []
+                }
+            ]
+        }
