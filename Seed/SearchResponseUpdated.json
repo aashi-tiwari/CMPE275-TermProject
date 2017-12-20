@@ -58,7 +58,7 @@
             ]
         }
     ],
-    "ReturnResponse": [
+    "returnResponse": [
         {
             "trainNumber": "SB0615",
             "departingStation": "A",
