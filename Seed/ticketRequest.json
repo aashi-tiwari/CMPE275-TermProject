@@ -1,5 +1,5 @@
 {
-    "searchResponse": 
+    "searchResponse": [
         {
             "trainNumber": null,
             "departingStation": "\u0000",
@@ -43,8 +43,8 @@
                     "connected": []
                 }
             ]
-        },
-    "returnResponse":
+        }],
+    "returnResponse":[
         {
             "trainNumber": null,
             "departingStation": "\u0000",
@@ -88,5 +88,5 @@
                     "connected": []
                 }
             ]
-        }
+        }]
 }
