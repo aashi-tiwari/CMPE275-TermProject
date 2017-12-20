@@ -6,7 +6,7 @@
             "arrivalStation": "\u0000",
             "departingTime": null,
             "arrivalTime": null,
-            "fare": "$3",
+            "fare": "$4",
             "passengerCount": 5,
             "departingDate1": "2017-12-18",
             "departingDate2": null,
@@ -15,11 +15,11 @@
             "ticketType": null,
             "connected": [
                 {
-                    "trainNumber": "SB0645",
-                    "departingStation": "A",
-                    "arrivalStation": "C",
-                    "departingTime": "06:45",
-                    "arrivalTime": "06:58",
+                    "trainNumber": "NB0645",
+                    "departingStation": "H",
+                    "arrivalStation": "F",
+                    "departingTime": "09:09",
+                    "arrivalTime": "09:22",
                     "fare": "$2",
                     "passengerCount": 5,
                     "departingDate1": "2017-12-18",
@@ -29,12 +29,12 @@
                     "connected": []
                 },
                 {
-                    "trainNumber": "SB0745",
-                    "departingStation": "C",
-                    "arrivalStation": "D",
-                    "departingTime": "08:01",
-                    "arrivalTime": "08:06",
-                    "fare": "$2",
+                    "trainNumber": "NB0700",
+                    "departingStation": "F",
+                    "arrivalStation": "A",
+                    "departingTime": "08:57",
+                    "arrivalTime": "09:22",
+                    "fare": "$3",
                     "passengerCount": 5,
                     "departingDate1": "2017-12-18",
                     "departingDate2": null,
@@ -43,8 +43,9 @@
                     "connected": []
                 }
             ]
-        }],
-    "returnResponse":[
+        }
+    ],
+    "returnResponse": [
         {
             "trainNumber": null,
             "departingStation": "\u0000",
@@ -56,15 +57,15 @@
             "departingDate1": "2017-12-18",
             "departingDate2": null,
             "connections": null,
-            "userId": "abc@xyz",
             "ticketType": null,
+            "userId": "abc@xyz",
             "connected": [
                 {
-                    "trainNumber": "SB0645",
+                    "trainNumber": "SB0715",
                     "departingStation": "A",
                     "arrivalStation": "C",
-                    "departingTime": "06:45",
-                    "arrivalTime": "06:58",
+                    "departingTime": "07:15",
+                    "arrivalTime": "07:28",
                     "fare": "$2",
                     "passengerCount": 5,
                     "departingDate1": "2017-12-18",
@@ -74,11 +75,11 @@
                     "connected": []
                 },
                 {
-                    "trainNumber": "SB0745",
+                    "trainNumber": "SB0645",
                     "departingStation": "C",
-                    "arrivalStation": "D",
-                    "departingTime": "08:01",
-                    "arrivalTime": "08:06",
+                    "arrivalStation": "H",
+                    "departingTime": "07:01",
+                    "arrivalTime": "07:38",
                     "fare": "$2",
                     "passengerCount": 5,
                     "departingDate1": "2017-12-18",
@@ -88,5 +89,6 @@
                     "connected": []
                 }
             ]
-        }]
+        }
+    ]
 }
