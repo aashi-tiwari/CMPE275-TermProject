@@ -130,21 +130,57 @@ public class TicketController {
 		TicketResponse response = new TicketResponse();
 		try {
 			JSONObject jsonObj = new JSONObject(payload.toString());
+			System.out.println("REQUEST RECEIVED IS ");
+			System.out.println(jsonObj);
 			JSONArray returnResponse = (JSONArray) jsonObj.get("returnResponse");
-			boolean isTwoWayJourney = true;
+//			boolean isTwoWayJourney = true;
+//			if(returnResponse.length()==0){
+//				isTwoWayJourney = false;
+//			}
+//			if(!isTwoWayJourney){
+//				response =  createTicketAndUpdateCapacityOneWay(payload, isTwoWayJourney);
+//			}else{
+//				response =  createTicketAndUpdateCapacityOneWay(payload, isTwoWayJourney);
+//			}
 			if(returnResponse.length()==0){
-				isTwoWayJourney = false;
+				response =  createTicketAndUpdateCapacityOneWay(payload, "OneWay");
+				if(response.getSearchResponse().size() == 1){response.getSearchResponse().get(0).setJourneyType("OW");}
+				else if(response.getSearchResponse().size() == 2){
+					response.getSearchResponse().get(0).setJourneyType("OWFH");
+					response.getSearchResponse().get(1).setJourneyType("OWSH");
+				}
+				return new ResponseEntity<>(response, HttpStatus.OK);
 			}
-			if(!isTwoWayJourney){
-				return createTicketAndUpdateCapacityOneWay(payload, isTwoWayJourney);
-			}else{
-				return createTicketAndUpdateCapacityOneWay(payload, isTwoWayJourney);
+			else{
+				TicketResponse result = new TicketResponse();
+				result =  createTicketAndUpdateCapacityOneWay(payload, "OneWay");
+				List<Ticket> tickets = result.getSearchResponse();
+				for(Ticket t : tickets){
+					response.getSearchResponse().add(t);
+				}
+				if(result.getSearchResponse().size() == 1){result.getSearchResponse().get(0).setJourneyType("OW");}
+				else if(result.getSearchResponse().size() == 2){
+					result.getSearchResponse().get(0).setJourneyType("OWFH");
+					result.getSearchResponse().get(1).setJourneyType("OWSH");
+				}
+				String transactionId = result.getSearchResponse().get(0).getTransactionId();
+				result =  createTicketAndUpdateCapacityOneWay(payload, "TwoWay");
+				if(result.getSearchResponse().size() == 1){result.getSearchResponse().get(0).setJourneyType("RT");}
+				else if(result.getSearchResponse().size() == 2){
+					result.getSearchResponse().get(0).setJourneyType("RTFH");
+					result.getSearchResponse().get(1).setJourneyType("RTSH");
+				}
+				List<Ticket> ticketsTwo = result.getSearchResponse();
+				for(Ticket t : ticketsTwo){
+					t.setTransactionId(transactionId);
+					response.getReturnResponse().add(t);
+				}
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>("BadRequest", HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	private ResponseEntity<?> createTicketAndUpdateCapacityWithReturn(String payload, boolean isTwoWayJourney) {
@@ -152,16 +188,21 @@ public class TicketController {
 		return new ResponseEntity<>(new Response(200, "Ok"), HttpStatus.OK);
 	}
 
-	private ResponseEntity<?> createTicketAndUpdateCapacityOneWay(String payload, boolean isTwoWayJourney) {
+	private TicketResponse createTicketAndUpdateCapacityOneWay(String payload, String way) {
 			// TODO Auto-generated method stub
 		System.out.println("Updating direct train with no connections");
+		TicketResponse response = new TicketResponse();
 		try{
 			JSONObject jsonObj1 = new JSONObject(payload.toString());
 			//START: P-A
-			JSONArray searchResponse = (JSONArray) jsonObj1.get("searchResponse");
+			JSONArray searchResponse;
+			if(way.equals("OneWay")){
+				searchResponse = (JSONArray) jsonObj1.get("searchResponse");
+			}else{
+				searchResponse = (JSONArray) jsonObj1.get("returnResponse");
+			}
 			JSONObject  jsonObj = (JSONObject) searchResponse.get(0);
 			JSONArray connected = (JSONArray) jsonObj.get("connected");
-			TicketResponse response = new TicketResponse();
 			Ticket ticket = new Ticket();
 			Ticket ticketObj = new Ticket();
 			if(connected.isNull(0)){
@@ -170,7 +211,7 @@ public class TicketController {
 				updateCapacity(ticket);
 				ticketObj = ticketRepository.save(ticket);
 				
-				response.getTicketResponse().add(ticketObj);
+				response.getSearchResponse().add(ticketObj);
 			}else{
 				JSONObject first = (JSONObject) connected.get(0);
 				JSONObject second = (JSONObject) connected.get(1);
@@ -180,28 +221,23 @@ public class TicketController {
 				//START: Saving 1st ticket and updating the train_capacity
 				updateCapacity(ticket);
 				ticketObj = ticketRepository.save(ticket);
-				response.getTicketResponse().add(ticketObj);
-				//END: Saving 1st ticket and updating the train_capacity
-				//Since same transaction id has to saved for the second ticket as well
+				response.getSearchResponse().add(ticketObj);
 				String transactionId = ticket.getTransactionId();
 				ticket = getTicketObject(second);
 				ticket.setFare(Integer.parseInt(jsonObj.getString("fare").substring(1)));
 				ticket.setTransactionId(transactionId);
 				ticket.setEmail(jsonObj.getString("userId"));
-				//START: Saving 1st ticket and updating the train_capacity
 				updateCapacity(ticket);
 				ticketObj = ticketRepository.save(ticket);
-				response.getTicketResponse().add(ticketObj);
-				//END: Saving 1st ticket and updating the train_capacity
+				response.getSearchResponse().add(ticketObj);
 			}
 			//END: P-A
 			//JsonObj.has("searchResponse")==true ? jsonObj.getBoolean("isRoundTrip"):false;
-	        return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 		catch(Exception e){
 			System.out.println("exception="+e);
-			return new ResponseEntity<>("BadRequest",HttpStatus.BAD_REQUEST);
 		}
+		return response;
 	}
 
 //		public  ResponseEntity<?> createTicketRecord(String payload){
@@ -301,7 +337,9 @@ public class TicketController {
 			if(jsonObj.has("userId")){
 				ticket.setEmail(jsonObj.getString("userId"));
 			}
-			ticket.setPassengerCount(jsonObj.getInt("passengerCount"));
+			int passengerCount = Integer.parseInt(jsonObj.getString("passengerCount"));
+			ticket.setPassengerCount(passengerCount);
+			//ticket.setPassengerCount(jsonObj.getInt("passengerCount"));
 			ticket.setConnections(jsonObj.getString("connections"));
 			ticket.setTicketType(jsonObj.getString("ticketType"));
 			ticket.setDepartingStation(jsonObj.getString("departingStation").charAt(0));
@@ -342,5 +380,24 @@ public class TicketController {
 //		return response;
 //	}
 	
+//	@CrossOrigin
+//	// Get Tickets booked by user
+//	@RequestMapping(value = "/tickets", method = RequestMethod.GET)
+//    public ResponseEntity<?> getTicketsForUser(@RequestBody String payload) {
+//		try{
+//			System.out.println("************in tickets "+payload);
+//			JSONObject jsonObj = new JSONObject(payload.toString());
+//			String userId=jsonObj.has("userId")==true ? jsonObj.getString("userId"):"";
+//	    	if (userId.isEmpty()) {
+//	    		return new ResponseEntity<>(new Response(404,"Invalid Arguements"), HttpStatus.BAD_REQUEST);
+//	        } 
+//	    	
+//	    	return new ResponseEntity<>(null,HttpStatus.OK);
+//    	}
+//    	catch(Exception e){
+//    		return new ResponseEntity<>("BadRequest",HttpStatus.BAD_REQUEST);
+//    	}
+//        
+//    }
 		
 }
