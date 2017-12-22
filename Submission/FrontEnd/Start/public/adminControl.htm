@@ -1,0 +1,48 @@
+<head>
+<style>
+.parenttbl{
+  background-color: white;
+  border: 1px solid black;
+  height: 600px;
+  width: 900px;
+}
+</style>
+</head>
+<div>
+  <table class="parenttbl">
+    <tr>
+      <td>
+        <button style="margin-left: 4.0em;" ng-click="toggle()" class="btn btn-primary">Cancel Train</button>
+        <button style="margin-left: 2.0em;"  ng-click="toggle1()" class="btn btn-primary">Reset System</button>
+        <div ng-show="resetVar">
+          <br/>
+          <br/>
+          <label>Enter default capacity
+          <input style="margin-left: 2.0em;" ng-model="defaultValue" type="text" Placeholder="eg.In range of 5-1000(Inclusive)"></input>
+          <br/>
+          <br/>
+          <button style="margin-left: 10.0em;" class="btn btn-primary" ng-click="reset()">Reset</button>
+          <br/>
+          <br/>
+          <h2>{{reset_message}}</h2>
+        </div>
+        <div ng-show="myVar">
+        <h2 style="margin-left: 2.0em; color:red"><b>Cancel Train</b></h2>
+      </br>
+    <label>Enter Date
+    <input style="margin-left: 6.0em;" ng-model="cancel_request.date" type="date"></input></label>
+    <br/>
+    <br/>
+    <label>Enter train number
+    <input style="margin-left: 2.0em;" ng-model="cancel_request.trainNumber" type="text" Placeholder="eg.SB0600"></input>
+    <br/>
+    <br/>
+    <button style="margin-left: 8.0em;" class="btn btn-primary" ng-click="cancel()">Cancel Train</button>
+    <br/>
+    <br/>
+    <h2>{{cancel_message}}</h2>
+  </div>
+  </td>
+</tr>
+  </table>
+</div>

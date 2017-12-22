@@ -1,0 +1,23 @@
+<head>
+<style>
+.parenttbl{
+  background-color: white;
+  border: 1px solid black;
+  height: 600px;
+  width: 900px;
+}
+</style>
+</head>
+<div>
+  <table class="parenttbl">
+    <tr>
+      <td>
+      	<h3>Thank You for Booking.Ticket receipt sent to your mailId.
+      	</h3>
+      	<div ng-repeat="n in ticketData">
+      	<h4>{{n.ticketData}}</h4>
+      </div>
+      </td>
+  </tr>
+</table>
+</div>

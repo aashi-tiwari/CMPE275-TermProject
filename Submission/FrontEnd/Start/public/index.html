@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="stylesheets/style.css">
+<!--<body ng-app="myApp">
+
+<p><a href="#/!">Main</a></p>
+<a href="#!login">Login</a>
+<a href="#!register">Register</a>
+-->
+
+<head>
+<style>
+h1 {
+	background-image: url("background.jpg");
+  background-color: #cccccc;
+}
+body{
+	background-image: url("http://www.bombardier.com/content/dam/Websites/bombardiercom/Projects/zefiro-electric-multiple-unit-5448.jpg/_jcr_content/renditions/original");
+  background-repeat: no-repeat;
+	background-position: center;
+  background-size: cover;
+	height: 450px;
+	}
+	.container {
+    position: relative;
+}
+</style>
+</head>
+
+<body ng-app="myApp" ng-submit="onGoogleLogin()" class="container">
+		<div id='main' class="container">
+			<nav class="navbar-fluid navbar-default navbar-fixed-top">
+				<div class="container">
+					<p class="navbar-left navbar-text"><a href="#/!"> Home </a></p>
+					<p class="navbar-text"> CUSR Reservation System</p>
+
+					<p class="navbar-right navbar-text" ng-hide='authenticated'><a href="#!adminLogin"><b>Admin Login</b></a></p>
+					<p class='navbar-right navbar-text' ng-show='authenticated'><a href='#' ng-click='signout()'>Logout</a></p>
+					<p class='navbar-right navbar-text' ng-show='authenticated'>Hi,{{current_user}}</p>
+				</div>
+			</nav>
+			<!--<img src="http://www.bombardier.com/content/dam/Websites/bombardiercom/Projects/zefiro-electric-multiple-unit-5448.jpg/_jcr_content/renditions/original" alt="Train" ng-hide='authenticated' style="width:1200px;height:228px;">
+			<h1>Hello</h1>
+			<input type="submit" value="Login with Google" class="loginBtn loginBtn--google" />
+			<button ng-click="fbLogin()" value="Login with Facebook" class="loginBtn loginBtn--facebook"/>
+			--><div class="col-md-offset-2 col-md-8">
+				<div ng-view>
+				</div>
+			</div>
+		</div>
+
+
+<!--<div ng-view></div>-->
+<script type = "text/javascript" src="connect.js"></script>
+<script type="text/javascript">
+(function(){
+	var p = document.createElement('script');
+	p.type = 'text/javascript';
+	p.async = true;
+	p.src = 'https://apis.google.com/js/client.js?onload=onLoadFunction';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(p, s);
+})();
+</script>
+<script>
+var app = angular.module("myApp", ["ngRoute"]).run(function($rootScope,$http){
+	$rootScope.authenticated = false;
+	$rootScope.current_user = "";
+	$rootScope.signout = function()
+	{
+		$http.get('auth/signout');
+		$rootScope.authenticated = false;
+		$rootScope.current_user = "";
+	};
+
+});
+app.config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+        templateUrl : "login.htm",
+				controller : "authController"
+    })
+		.when("/reset", {
+        templateUrl : "reset_password.htm",
+        controller : "authController"
+
+    })
+    .when("/adminLogin", {
+        templateUrl : "adminLogin.htm",
+        controller : "authController"
+
+    })
+
+    .when("/adminControl", {
+        templateUrl : "adminControl.htm",
+        controller : "authController"
+
+    })
+
+    .when("/showTicket", {
+        templateUrl : "showTicket.htm",
+        controller : "authController"
+
+    })
+
+		.when("/login", {
+        templateUrl : "login.htm",
+        controller : "authController"
+
+    })
+
+		.when("/exam",{
+			templateUrl : "exam_page.html",
+			controller : "authController"
+		})
+
+		.when("/search",{
+			templateUrl : "search.html",
+			controller : "authController"
+		})
+
+		.when("/register", {
+        templateUrl : "register.htm",
+        controller : "authController"
+    });
+});
+app.controller('authController', function($scope, $http, $rootScope, $location, $window){
+  //$scope.user = {name: 'Sayali', email:'Sayali@yahoo.com',password: 'test'};
+		$scope.user = {name: '',email:'',password:''};
+		$scope.trip = {
+        type: 'one-way'
+      };
+			$scope.ticket = {
+	        type: 'any'
+	      };
+				$scope.connection = {
+		        type: 'any'
+		      };
+	  $scope.names = ["A", "B", "C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+		$scope.email = {
+			user_name : '',
+			email : ''
+		};
+
+    $scope.ticketData = {};
+		$scope.search_query = {
+			departingStation1 : '',
+			arrivalStation1 : '',
+			departingDate1 : '',
+			exactTime1 : '',
+			ticketType : 'any',
+			departingDate2  : '',
+			isRoundTrip : 'false',
+			passengerCount : '',
+			connections : 'None',
+      exactTime2 : '',
+      departingDate2:'',
+      userId:''
+		};
+
+    $scope.single = [];
+    $scope.singleTwo = [];
+    $scope.connectedTwo = [];
+    $scope.connected = [];
+    $scope.return_single = [];
+    $scope.return_connected = [];
+    $scope.bookTempOne = [];
+    $scope.bookTempTwo = [];
+    $scope.cancel_request = {
+      trainNumber : '',
+      date : ''
+    };
+    //$scope.book_request_test = [],
+    $scope.book_request_test = [];
+    $scope.book_request = [{
+      arrivalStation : '',
+      arrivalTime : null,
+      userId : '',
+      fare : '',
+      passengerCount : '',
+      departingDate1 : '',
+      journeyType : '',
+      connections : '',
+      ticketType : '',
+      connected : [/*{
+          arrivalStation : '',
+          arrivalTime : '',
+          departingStation : '',
+          departingTime : '',
+          fare : '',
+          trainNumber : '',
+          passengerCount : '',
+          departingDate1 : '',
+          departingDate2 : '',
+          connections : '',
+          ticketType : '',
+        }*/],
+        departingStation : '',
+        departingTime : '',
+        trainNumber : ''
+    }];
+    $scope.book_request1 = [{
+      arrivalStation : '',
+      arrivalTime : null,
+      userId : '',
+      fare : '',
+      passengerCount : '',
+      departingDate1 : '',
+      journeyType : '',
+      connections : '',
+      ticketType : '',
+      connected : [/*{
+          arrivalStation : '',
+          arrivalTime : '',
+          departingStation : '',
+          departingTime : '',
+          fare : '',
+          trainNumber : '',
+          passengerCount : '',
+          departingDate1 : '',
+          departingDate2 : '',
+          connections : '',
+          ticketType : '',
+        }*/],
+        departingStation : '',
+        departingTime : '',
+        trainNumber : ''
+    }];
+
+    $scope.book_complete_request = {
+      searchResponse : [],
+      returnResponse : []
+    };
+
+
+		$scope.times = ["6:00","6:15","6:30","6:45",
+										"7:00","7:15","7:30","7:45",
+										"8:00","8:15","8:30","8:45",
+										"9:00","9:15","9:30","9:45",
+										"10:00","10:15","10:30","10:45",
+										"11:00","11:15","11:30","11:45",
+										"12:00","12:15","12:30","12:45",
+										"13:00","13:15","13:30","13:45",
+										"14:00","14:15","14:30","14:45",
+										"15:00","15:15","15:30","15:45",
+										"16:00","16:15","16:30","16:45",
+										"17:00","17:15","17:30","17:45",
+										"18:00","18:15","18:30","18:45",
+										"19:00","19:15","19:30","19:45",
+										"20:00","20:15","20:30","20:45",
+										"21:00"];
+$scope.myVar = false;
+$scope.defaultValue ='';
+$scope.resetVar = false;
+
+$scope.toggle = function() {
+    $scope.myVar = !$scope.myVar;
+    $scope.resetVar = false;
+};
+
+$scope.toggle1 = function() {
+  $scope.myVar = false;
+  $scope.resetVar = true;
+};
+
+$scope.reset = function(){
+  console.log($scope.defaultValue);
+  $http.post('http://localhost:8080/CUSR/trains/systemReset', $scope.defaultValue).then(function successCallback(response){
+
+      console.log("After Reset..........",response);
+      console.log(response.status);
+
+      if(response.status == 200){
+        console.log("Debug 1:Reset If..........");
+        $scope.reset_message = 'System reset sucessful';
+      }
+      else if(response.status == 208){
+        console.log('In else');
+      }
+
+    },
+    function errorCallback(response) {
+      console.log(response);
+});
+};
+
+$scope.cancel = function()
+{
+  console.log($scope.cancel_request);
+  $http.post('http://localhost:8080/CUSR/trains/cancelTrain', $scope.cancel_request).then(function successCallback(response){
+
+			console.log("After Cancel..........",response);
+			console.log(response.status);
+
+			if(response.status == 200){
+				console.log("Debug 1:Cancel If..........");
+        $scope.cancel_message = 'Train sucessfully cancelled';
+			}
+			else if(response.status == 208){
+				console.log('In else');
+			}
+
+		},
+		function errorCallback(response) {
+			console.log(response);
+});
+};
+
+$scope.adminLogin = function()
+{
+  console.log('In admin login');
+  if($scope.user.username == 'admin' && $scope.user.password == 'admin')
+  {
+    $rootScope.authenticated = true;
+    $rootScope.current_user = $scope.user.username;
+    $location.path('/adminControl');
+  }
+  else {
+    alert('Invalid credentials entered');
+    $window.location.reload();
+  }
+}
+
+$scope.login = function()
+{
+	/*
+	$http.post('/auth/login', $scope.user).success(function(data){
+
+		   console.log("Before If..........");
+       if(data.state == 'success'){
+				 console.log("Debug 1:Login If..........");
+         $rootScope.authenticated = true;
+         $rootScope.current_user = data.user.username;
+         $location.path('/reset');
+       }
+       else{
+				 console.log("Debug 2:Login else..........");
+         $scope.error_message = data.message;
+       }
+			 console.log("After If..........");
+     });*/
+		 console.log("Request : ",$scope.user);
+		 $http.post('http://localhost:8080/CUSR/loginUser', $scope.user).then(function successCallback(response){
+
+		 		 console.log("After Post..........",response);
+
+				 			if(response.status == 200){
+				 				console.log("Debug 1:Login If..........");
+				 				$location.path('/exam');
+				 			}
+						},
+							function errorCallback(response) {
+								console.log('Username does not exists');
+								$window.location.reload();
+					});
+};
+				 //console.log(response.data.state);
+				 //console.log(response.data.user.username);
+
+		 		 /*if(response.data.state == 'success'){
+		 			 console.log("Debug 1:Login If..........");
+		 			 /*$rootScope.authenticated = true;
+		 			 $rootScope.current_user = response.data.user.username;
+					 $scope.error_message = response.message;
+		 			 $location.path('/exam');
+		 		 }
+		 		 else{
+		 			 console.log("Debug 2:Login else..........");
+		 			 $scope.error_message = response.message;
+		 		 }
+		 		 console.log("After If..........");*/
+
+
+
+
+
+$scope.fbLogin = function()
+{
+  console.log('I am called');
+	FB.login(function(response){
+		if(response.authResponse){
+			FB.api('/me','GET',{fields:'email, first_name, name, id, picture'}, function(response){
+				$scope.$apply(function(){
+					$scope.email.user_name = response.name;
+					$scope.email.email = response.email;
+					$rootScope.authenticated = true;
+          $rootScope.current_user = response.email;
+					console.log("Request : ",$scope.email.email);
+		 		/*$http.post('http://localhost:8080/CUSR/loginUser', $scope.email.email).then(function successCallback(response){
+
+		 		 		 console.log("After Post..........",response);
+
+		 				 			if(response.status == 200){
+		 				 				console.log("Debug 1:Login If..........");
+		 				 			}
+		 						},
+		 							function errorCallback(response) {
+		 								console.log('Username does not exists');
+		 								$window.location.reload();
+		 					});*/
+					$location.path('/search');
+				});
+			});
+		}
+		else {
+		 //error
+		}
+	}
+	,{
+	scope : 'email, user_likes',
+	return_scopes : true
+	}
+)
+};
+
+$scope.search_Trains = function()
+{
+		console.log('In search' + $scope.search_query.departingStation1);
+		console.log('In search' + $scope.search_query.arrivalStation1);
+		console.log('In search' + $scope.search_query.departingDate1);
+		console.log('In search' + $scope.search_query.exactTime1);
+		console.log('In search' + $scope.search_query.departingDate2);
+		console.log('In search' + $scope.search_query.ticketType);
+		console.log('In search' + $scope.search_query.isRoundTrip);
+		console.log('In search' + $scope.search_query.connections);
+		console.log('In search' + $scope.search_query.passengerCount);
+    var today = new Date();
+    console.log(today);
+    today.setHours(0,0,0,0)
+    $scope.search_query.userId = $rootScope.current_user;
+  if($scope.search_query.departingStation1 == '' || $scope.search_query.arrivalStation1 == '' || $scope.search_query.departingDate1 == '')
+	{
+    $scope.error = 'Please Enter all mandatory(*) fields';
+  }
+  else if($scope.search_query.departingStation1 == $scope.search_query.arrivalStation1)
+  {
+    $scope.error = 'Please Enter different stations';
+  }
+  /*else if($scope.search_query.departingDate1<today)
+  {
+    console.log('Selected date : ',$scope.search_query.departingDate1);
+    $scope.error = 'Invalid date entered';
+  }
+  else if($scope.search_query.departingDate2-$scope.search_query.departingDate1 > 7)
+  {
+    $scope.error = 'Select return date within 7 days';
+  }*/
+  
+  else
+  {
+    $scope.error = '';
+    $http.post('http://localhost:8080/CUSR/trains', $scope.search_query).then(function successCallback(response){
+
+				console.log("After Post..........",response);
+
+						 if(response.status == 200){
+               $scope.flag = true;
+							 console.log("Debug 1:Search Suceess.........***");
+
+               for(var i=0; i<5; i++)
+               { 
+                 $scope.bookTempOne.push(response.data.searchResponse[i]);
+                 console.log(response.data.searchResponse[i]);
+                 console.log("Hello" , i);
+                 if(response.data.searchResponse[i].connected.length == 0)
+                    $scope.single.push(response.data.searchResponse[i]);
+                  else {
+                    /*for(var j=0; j<response.data.searchResponse[i].connected.length; j++)
+                    {*/
+                      $scope.connected.push(response.data.searchResponse[i].connected);
+
+                  }
+               }
+              // var count = 0;
+               for(var i=0; i<5; i++)
+               {
+               if(i > response.data.returnResponse[i].connected.length){break;}
+                 $scope.bookTempTwo.push(response.data.returnResponse[i]);
+
+                 console.log("Hello" , i);
+                 if(response.data.returnResponse[i].connected.length == 0)
+                    $scope.singleTwo.push(response.data.returnResponse[i]);
+                  else {
+                    /*for(var j=0; j<response.data.searchResponse[i].connected.length; j++)
+                    {*/
+                      $scope.connectedTwo.push(response.data.returnResponse[i].connected);
+
+                  }
+               }
+               /*console.log($scope.search_response);
+               console.log($scope.return_response);*/
+						 }
+					 },
+						 function errorCallback(response) {
+							 console.log('Error Search');
+				 });
+}
+};
+
+$scope.bookTicket1 = function(index)
+{
+  console.log("Entire booktemp : ", $scope.bookTempOne);
+  console.log(index);
+  console.log("11111 : ",$scope.bookTempOne[index]);
+  //console.log("RE ", $scope.book_request);
+  console.log($scope.book_request);
+  console.log("REQUEST INDEX " , $scope.bookTempOne[index]);
+       
+       $scope.book_request = $scope.bookTempOne[index];
+     //  $scope.book_request.userId = $rootScope.current_user;
+      // $scope.book_request_test.arrivalStation = $scope.bookTempOne[index].arrivalStation;
+      // $scope.book_request_test.arrivalTime = $scope.bookTempOne[index].arrivalTime;
+      // $scope.book_request_test.departingStation = $scope.bookTempOne[index].departingStation;
+      // $scope.book_request_test.departingTime = $scope.bookTempOne[index].departingTime;
+      // $scope.book_request_test.fare = $scope.bookTempOne[index].fare;
+      // $scope.book_request_test.trainNumber = $scope.bookTempOne[index].trainNumber;
+      // $scope.book_request_test.userId = $rootScope.current_user;
+      // $scope.book_request_test.connected = $scope.bookTempOne[index].connected;
+      // $scope.book_request_test.passengerCount = $scope.bookTempOne[index].passengerCount;
+      // $scope.book_request_test.journeyType = $scope.bookTempOne[index].journeyType;
+      // $scope.book_request_test.departingDate1 = $scope.bookTempOne[index].departingDate1;
+      // $scope.book_request_test.connections = $scope.bookTempOne[index].connections;
+      // $scope.book_request_test.ticketType = $scope.bookTempOne[index].ticketType;
+      // $scope.book_request.arrivalStation = $scope.bookTempOne[index].arrivalStation;
+      // $scope.book_request.arrivalTime = $scope.bookTempOne[index].arrivalTime;
+      // $scope.book_request.departingStation = $scope.bookTempOne[index].departingStation;
+      // $scope.book_request.departingTime = $scope.bookTempOne[index].departingTime;
+      // $scope.book_request.fare = $scope.bookTempOne[index].fare;
+      // $scope.book_request.trainNumber = $scope.bookTempOne[index].trainNumber;
+      // $scope.book_request.userId = $rootScope.current_user;
+      // $scope.book_request.connected = $scope.bookTempOne[index].connected;
+      // $scope.book_request.passengerCount = $scope.bookTempOne[index].passengerCount;
+      // $scope.book_request.journeyType = $scope.bookTempOne[index].journeyType;
+      // $scope.book_request.departingDate1 = $scope.bookTempOne[index].departingDate1;
+      // $scope.book_request.connections = $scope.bookTempOne[index].connections;
+      // $scope.book_request.ticketType = $scope.bookTempOne[index].ticketType;
+
+      console.log("RE ", $scope.book_request);
+    /*}
+    else
+    {
+      $scope.book_request.arrivalStation = $scope.bookTempOne[index].arrivalStation;
+      $scope.book_request.arrivalTime = $scope.bookTempOne[index].arrivalTime;
+      $scope.book_request.connected = $scope.bookTempOne[index].connected;
+      $scope.book_request.departingStation = $scope.bookTempOne[index].departingStation;
+      $scope.book_request.departingTime = $scope.bookTempOne[index].departingTime;
+      $scope.book_request.fare = $scope.bookTempOne[index].fare;
+      $scope.book_request.trainNumber = $scope.bookTempOne[index].trainNumber;
+      $scope.book_request.userId = $rootScope.current_user;
+      $scope.book_request.passengerCount = $scope.bookTempOne[index].passengerCount;
+      $scope.book_request.journeyType = $scope.bookTempOne[index].journeyType;
+      $scope.book_request.departingDate1 = $scope.bookTempOne[index].departingDate1;
+      $scope.book_request.connections = $scope.bookTempOne[index].connections;
+      $scope.book_request.ticketType = $scope.bookTempOne[index].ticketType;
+    }*/
+/*
+    if(($scope.bookTempTwo[index].connected).length != 0)
+    {
+      $scope.book_request1.arrivalStation = $scope.bookTempTwo[index].arrivalStation;
+      $scope.book_request1.arrivalTime = $scope.bookTempTwo[index].arrivalTime;
+      $scope.book_request1.departingStation = $scope.bookTempTwo[index].departingStation;
+      $scope.book_request1.departingTime = $scope.bookTempTwo[index].departingTime;
+      $scope.book_request1.fare = $scope.bookTempTwo[index].fare;
+      $scope.book_request1.trainNumber = $scope.bookTempTwo[index].trainNumber;
+      $scope.book_request1.userId = $rootScope.current_user;
+      $scope.book_request1.connected = $scope.bookTempTwo[index].connected;
+      $scope.book_request1.passengerCount = $scope.bookTempTwo[index].passengerCount;
+      $scope.book_request1.journeyType = $scope.bookTempTwo[index].journeyType;
+      $scope.book_request1.departingDate1 = $scope.bookTempTwo[index].departingDate1;
+      $scope.book_request1.connections = $scope.bookTempTwo[index].connections;
+      $scope.book_request1.ticketType = $scope.bookTempTwo[index].ticketType;
+    }
+    else
+    {
+      $scope.book_request1.arrivalStation = $scope.bookTempTwo[index].arrivalStation;
+      $scope.book_request1.arrivalTime = $scope.bookTempTwo[index].arrivalTime;
+      $scope.book_request1.connected = $scope.bookTempTwo[index].connected;
+      $scope.book_request1.departingStation = $scope.bookTempTwo[index].departingStation;
+      $scope.book_request1.departingTime = $scope.bookTempTwo[index].departingTime;
+      $scope.book_request1.fare = $scope.bookTempTwo[index].fare;
+      $scope.book_request1.trainNumber = $scope.bookTempTwo[index].trainNumber;
+      $scope.book_request1.userId = $rootScope.current_user;
+      $scope.book_request1.passengerCount = $scope.bookTempTwo[index].passengerCount;
+      $scope.book_request1.journeyType = $scope.bookTempTwo[index].journeyType;
+      $scope.book_request1.departingDate1 = $scope.bookTempTwo[index].departingDate1;
+      $scope.book_request1.connections = $scope.bookTempTwo[index].connections;
+      $scope.book_request1.ticketType = $scope.bookTempTwo[index].ticketType;
+    }*/
+ 
+//  console.log("Request1:",$scope.book_request_test);
+};
+
+$scope.bookTicket2 = function(index)
+{
+  console.log("Entire booktemp1 : ", $scope.bookTempTwo);
+  console.log(index);
+  console.log("22222 : ",$scope.bookTempTwo[index]);
+
+       $scope.book_request1 = $scope.bookTempTwo[index];
+      // $scope.book_request1.arrivalStation = $scope.bookTempTwo[index].arrivalStation;
+      // $scope.book_request1.arrivalTime = $scope.bookTempTwo[index].arrivalTime;
+      // $scope.book_request1.departingStation = $scope.bookTempTwo[index].departingStation;
+      // $scope.book_request1.departingTime = $scope.bookTempTwo[index].departingTime;
+      // $scope.book_request1.fare = $scope.bookTempTwo[index].fare;
+      // $scope.book_request1.trainNumber = $scope.bookTempTwo[index].trainNumber;
+      // $scope.book_request1.userId = $rootScope.current_user;
+      // $scope.book_request1.connected = $scope.bookTempTwo[index].connected;
+      // $scope.book_request1.passengerCount = $scope.bookTempTwo[index].passengerCount;
+      // $scope.book_request1.journeyType = $scope.bookTempTwo[index].journeyType;
+      // $scope.book_request1.departingDate1 = $scope.bookTempTwo[index].departingDate1;
+      // $scope.book_request1.connections = $scope.bookTempTwo[index].connections;
+      // $scope.book_request1.ticketType = $scope.bookTempTwo[index].ticketType;
+  
+  console.log("Request2:",$scope.book_request1);
+};
+
+$scope.submitBooking = function()
+{
+  //if($scope.book_request1.passengerCount != '' && $scope.book_request1.passengerCount != undefined)
+  if($scope.book_request1.passengerCount){
+    $scope.book_complete_request.returnResponse[0] = $scope.book_request1;
+  }
+ $scope.book_complete_request.searchResponse[0] = $scope.book_request;
+
+//  $scope.book_complete_request.returnResponse = $scope.book_request1;
+  console.log("Request : ",$scope.book_complete_request);
+  $http.post('http://localhost:8080/CUSR/ticket', $scope.book_complete_request).then(function successCallback(response){
+
+      console.log("After booking..........",response);
+
+           if(response.status == 200){
+             console.log("Debug 1:Booking Suceess.........***");
+
+            /* for(var i=0; i<response.data.searchResponse.length; i++)
+             {
+               $scope.bookTemp.push(response.data.searchResponse[i]);
+               console.log("Hello" , i);
+               if(response.data.searchResponse[i].connected.length == 0)
+                  $scope.single.push(response.data.searchResponse[i]);
+                else {
+                  /*for(var j=0; j<response.data.searchResponse[i].connected.length; j++)
+                  {
+                    $scope.connected.push(response.data.searchResponse[i].connected);
+
+                }
+             }*/
+             //console.log(response);
+             $scope.ticketData = response.data;
+             console.log('Ticket Data : ', $scope.ticketData);
+             $location.path('/showTicket');
+           }
+         },
+           function errorCallback(response) {
+             console.log('Error Booking');
+       });
+};
+
+$scope.onGoogleLogin = function()
+{
+	console.log('In called');
+	var params = {
+  //  'clientid' : '145445012518-8ebaurd7f37r45cm1mhiat4iili2kobj.apps.googleusercontent.com',
+		'clientid' : '808321520558-l901rd3bf1s8cdr8edlecn95239i4pbl.apps.googleusercontent.com',
+		'cookiepolicy' : 'single_host_origin',
+		'callback' : function(result){
+			if(result['status']['signed_in']){
+				var request = gapi.client.plus.people.get(
+					{
+						'userId' : 'me'
+					}
+				);
+				request.execute(function(resp){
+					$scope.$apply(function(){
+						$scope.email.user_name = resp.displayName;
+						$scope.email.email = resp.emails[0].value;
+						$rootScope.authenticated = true;
+	          $rootScope.current_user = resp.emails[0].value;
+						$location.path('/search');
+					});
+				});
+			}
+
+		},
+		'approvalprompt' : 'force',
+		'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+	};
+	gapi.auth.signIn(params);
+};
+
+$scope.register = function()
+{
+	/*if($scope.password == $scope.password1)
+	{
+		console.log('Passwords are same');
+	}
+	else {
+		console.log('Password different');
+	}*/
+	console.log("Request : ",$scope.user);
+	$http.post('http://localhost:8080/CUSR/registerUser', $scope.user).then(function successCallback(response){
+
+			console.log("After Post..........",response);
+			console.log(response.status);
+			//console.log(response.data.user.username);
+
+			if(response.status == 200){
+				console.log("Debug 1:Register If..........");
+				$location.path('/login');
+			}
+			else if(response.status == 208){
+				console.log('In else');
+				   $window.location.reload();
+			}
+
+		},
+		function errorCallback(response) {
+			console.log('Username already exists');
+});
+				/*$rootScope.authenticated = true;
+				$rootScope.current_user = response.data.user.username;
+				$scope.error_message = response.message;
+
+			}
+			else{
+				console.log("Debug 2:Login else..........");
+				$scope.error_message = response.message;
+			}
+			console.log("After If..........");*/
+
+};
+
+});
+
+</script>
+
+</body>
+</html>

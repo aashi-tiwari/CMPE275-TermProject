@@ -1,0 +1,212 @@
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+
+.parenttbl{
+  background-color: white;
+  border: 1px solid black;
+  height: 700px;
+  width: 1590px;
+}
+.childtbl{
+
+    position: relative;
+    height: 320px;
+    width: 600px;
+    top: -120px;
+    left: 120px;
+    text-align: left;
+}
+select{
+  width: 50px;
+}
+.details{
+  text-align: left;
+}
+.center {
+    position: absolute;
+    left: -430px;
+    top: -20px;
+    text-align: center;
+    font-size: 18px;
+}
+</style>
+</head>
+<body>
+<form>
+  <div class="center">
+  <table class="parenttbl">
+    <tr>
+        <td>
+          <table class="childtbl">
+            <th style="margin-left:35.0em; color:blue"><h2><b>Search</b></h2></th>
+            <tr>
+              <td>
+                <label>*From Station
+                <select style="margin-left: 2.2em;" ng-model="search_query.departingStation1" ng-options="stationName for stationName in names">
+                </select>
+                </label>
+                <br/>
+                  <label>*To Station
+                  <select style="margin-left: 3.6em;" ng-model="search_query.arrivalStation1" ng-options="stationName for stationName in names">
+                  </select>
+                </label>
+                  <br/>
+                  <br/>
+                  <label>
+                  *Date
+                  <input style="margin-left: 6.0em;" ng-model="search_query.departingDate1" type="date"></input>
+                  </label>
+                  <br/>
+                  <br/>
+
+                  <label>*Trip Type  </label>
+                  <input style="margin-left: 3.6em;" name="trip" type="radio" ng-model="search_query.isRoundTrip" value="false">
+                     One-way
+                  </input>
+
+                  <input type="radio" name="trip" style="margin-left: 1.0em;" ng-model="search_query.isRoundTrip" value="true">
+                     Round-Trip
+                  </input>
+                  <div ng-show="search_query.isRoundTrip == 'true'">
+                    <label>
+                    *Return Date
+                    <input style="margin-left: 2.0em;" ng-model="search_query.departingDate2" type="date"></input>
+                    </label>
+                  </div>
+                  <br/>
+                  <label>Ticket Type  </label>
+                  <input type="radio" style="margin-left: 3.0em;" ng-model="search_query.ticketType" value="regular">
+                     Regular
+                  </input>
+
+                  <input type="radio" style="margin-left: 1.2em;" ng-model="search_query.ticketType" value="express">
+                     Express
+                  </input>
+
+                  <input type="radio" style="margin-left: 1.0em;" ng-model="search_query.ticketType" value="any">
+                     Any
+                  </input>
+                </br>
+                <label>Connection Type  </label>
+                <input type="radio" style="margin-left: 0.4em;" ng-model="search_query.connections" value="None">
+                   None
+                </input>
+
+                <input type="radio" style="margin-left: 1.0em;" ng-model="search_query.connections" value="One">
+                   One
+                </input>
+
+                <input type="radio" style="margin-left: 1.0em;" ng-model="search_query.connections" value="Any">
+                   Any
+                </input>
+                <br/>
+                <label>Start Time
+                <select style="margin-left: 3.4em;" ng-model="search_query.exactTime1" ng-options="time for time in times">
+                </select>
+                </label>
+                <label> Exact time
+                <input type="radio" style="margin-left: 0.4em;" ng-model="search_query.exactTime12" value="Yes">
+                   Yes
+                </input>
+
+                <input type="radio" style="margin-left: 1.0em;" ng-model="search_query.exactTime12" value="No">
+                   No
+                </input>
+                </label>
+                <br/>
+                <label>Nu of Passenger
+                <input type="text" style="margin-left: 0.8em;" ng-model="search_query.passengerCount">
+                </label>
+                <br/>
+                <input type="button" style="margin-left: 17.0em;" ng-click = "search_Trains();" class="btn btn-primary" value="Search">
+                </input>
+              </td>
+            </tr>
+          </table>
+
+          <h2 style="margin-left: 4.0em; color:red;"><b>{{error}}</b></h2>
+        </td>
+
+          <td width="20%" class="parenttbl">
+              <h2 ng-show="flag">One way train</h2>
+              <div ng-repeat="n in single">
+                <div class="details" style="margin-left: 10.0em; border: 1px solid black; width:650px; ">
+                Train Number : {{n.trainNumber}}&nbsp;&nbsp;
+                <br/>
+                Departing Station : {{n.departingStation}}&nbsp;&nbsp;
+                Arrival Station : {{n.arrivalStation}}&nbsp;&nbsp;
+                <br/>
+                Departing Time : {{n.departingTime}}&nbsp;&nbsp;
+                Arrival Time : {{n.arrivalTime}}&nbsp;&nbsp;
+                <br/>
+                Fare : {{n.fare}}&nbsp;&nbsp;
+                <br/>
+              <button style="margin-left: 22.0em;" ng-click="bookTicket1($index)" class="btn btn-primary">Book</button>
+            </div>
+            <br/>
+          </div>
+
+            <div ng-repeat="n in connected">
+            <div style="margin-left: 10.0em;border: 1px solid black; width:650px;">
+            <div class="details" ng-repeat="i in n">
+                  Train Number : {{i.trainNumber}}&nbsp;&nbsp;
+                  <br/>
+                  Departing Station : {{i.departingStation}}&nbsp;&nbsp;
+                  Arrival Station : {{i.arrivalStation}}&nbsp;&nbsp;
+                  <br/>
+                  Departing Time : {{i.departingTime}}&nbsp;&nbsp;
+                  Arrival Time : {{i.arrivalTime}}&nbsp;&nbsp;
+                  <br/>
+                  Fare : {{i.fare}}&nbsp;&nbsp;
+          </div>
+          <br>
+          <button class="btn btn-primary" ng-click="bookTicket1(connected.indexOf(n)+single.length)">Book</button>
+          </div>
+        </br>
+          </div>
+          <h2 ng-show="flag">Return Trip train</h2>
+          <div ng-repeat="n in singleTwo">
+            <div class="details" style="margin-left: 10.0em; border: 1px solid black; width:650px; ">
+            Train Number : {{n.trainNumber}}&nbsp;&nbsp;
+            <br/>
+            Departing Station : {{n.departingStation}}&nbsp;&nbsp;
+            Arrival Station : {{n.arrivalStation}}&nbsp;&nbsp;
+            <br/>
+            Departing Time : {{n.departingTime}}&nbsp;&nbsp;
+            Arrival Time : {{n.arrivalTime}}&nbsp;&nbsp;
+            <br/>
+            Fare : {{n.fare}}&nbsp;&nbsp;
+            <br/>
+          <button style="margin-left: 22.0em;" ng-click="bookTicket2($index)" class="btn btn-primary">Book</button>
+        </div>
+        <br/>
+      </div>
+
+        <div ng-repeat="n in connectedTwo">
+        <div style="margin-left: 10.0em;border: 1px solid black; width:650px;">
+        <div class="details" ng-repeat="i in n">
+              Train Number : {{i.trainNumber}}&nbsp;&nbsp;
+              <br/>
+              Departing Station : {{i.departingStation}}&nbsp;&nbsp;
+              Arrival Station : {{i.arrivalStation}}&nbsp;&nbsp;
+              <br/>
+              Departing Time : {{i.departingTime}}&nbsp;&nbsp;
+              Arrival Time : {{i.arrivalTime}}&nbsp;&nbsp;
+              <br/>
+              Fare : {{i.fare}}&nbsp;&nbsp;
+      </div>
+      <br>
+      <button class="btn btn-primary" ng-click="bookTicket2(connected.indexOf(n)+singleTwo.length)">Book</button>
+      </div>
+    </br>
+      </div>
+      <button ng-show="flag" style="btn btn-primary" ng-click="submitBooking()">Submit Booking</button>
+          </td>
+      </tr>
+    </table>
+  </div>
+</form>
+</body>
